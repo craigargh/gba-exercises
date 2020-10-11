@@ -125,6 +125,7 @@ u8 calculateAnimationFrame(const Player* player, const Directions* newKeys, cons
         if (!newKeys->up & !newKeys->down & !newKeys->left & !newKeys->right)
             frame = 0;
     }
+    
     frameTicks += 1;
     if (frameTicks > framesPerTick)
         frameTicks = 0;
