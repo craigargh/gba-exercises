@@ -87,14 +87,27 @@ Player initPlayer(){
 u8 calculateFacing(const Player* player, const Directions* newKeys, const Directions* oldKeys){
     u16 facing = player->facing;
 
-    if (newKeys->up)
-        facing = NORTH;
-    if (newKeys->down)
-        facing = SOUTH;
-    if (newKeys->right)
-        facing = EAST;
-    if (newKeys->left)
-        facing = WEST;
+    if (((newKeys->up | newKeys->down) & (newKeys->left | newKeys->right))){
+        if (newKeys->up & (player->facing==NORTH))
+            facing = NORTH;
+        if (newKeys->right & (player->facing==EAST))
+            facing = EAST;
+        if (newKeys->down & (player->facing==SOUTH))
+            facing = SOUTH;
+        if (newKeys->left & (player->facing==WEST))
+            facing = WEST;
+
+    } else {
+        if (newKeys->up)
+            facing = NORTH;
+        if (newKeys->down)
+            facing = SOUTH;
+        if (newKeys->right)
+            facing = EAST;
+        if (newKeys->left)
+            facing = WEST;
+    }
+
 
     return facing;
 }
