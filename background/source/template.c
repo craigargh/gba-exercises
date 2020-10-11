@@ -21,6 +21,8 @@ typedef u16 ScreenBlock[1024];
 #define EAST 2
 #define SOUTH 3
 #define WEST 4
+#define min(x,y) (x > y ? y : x)
+#define max(x,y) (x < y ? y : x)
 
 typedef struct {
     u8 facing;
@@ -36,7 +38,24 @@ typedef struct {
     bool right;
 } Directions;
 
+typedef struct {
+    u8 x;
+    u8 y;
+} Position;
+
 u16 ticks = 0;
+
+#define WINDOW_VERTICAL 48
+#define WINDOW_HORIZONTAL 88 
+
+const u8 windowTop = 0 + WINDOW_VERTICAL;
+const u8 windowBottom = SCREEN_HEIGHT - 16 - WINDOW_VERTICAL;
+
+const u8 windowLeft = 0 + WINDOW_HORIZONTAL;
+const u8 windowRight = SCREEN_WIDTH - 16 - WINDOW_HORIZONTAL;
+
+
+
 
 
 void uploadPaletteMem(){
@@ -148,11 +167,19 @@ Player updatePlayer(const Player* player, const Directions* keys){
     else if (keys->left)
         xMove = -1;
 
+    int newX = player->posX + xMove;
+    newX = max(windowLeft, newX);
+    newX = min(windowRight, newX);
+
+    int newY = player->posY + yMove;
+    newY = max(windowTop, newY);
+    newY = min(windowBottom, newY);
+
 
     Player updatedPlayer;
     updatedPlayer.facing = facing;
-    updatedPlayer.posX = player->posX + xMove;
-    updatedPlayer.posY = player->posY + yMove;
+    updatedPlayer.posX = newX;
+    updatedPlayer.posY = newY;
     updatedPlayer.animationFrame = animationFrame;
 
     return updatedPlayer;
@@ -202,8 +229,32 @@ Directions heldKeys(){
     return keys;
 }
 
+Position calculateBgPos(const Position* bgPos, const Player* player, const Directions* keys){
+    Position newPos;
+    newPos.x = bgPos->x;
+    newPos.y = bgPos->y;
+
+
+    if (player->posX == windowRight && keys->right)
+        newPos.x += 1;
+    else if (player->posX == windowLeft && keys->left)
+        newPos.x -= 1;
+
+    if (player->posY == windowTop && keys->up)
+        newPos.y -= 1;
+    else if (player->posY == windowBottom && keys->down)
+        newPos.y += 1;
+
+    return newPos;
+}
+
 void updateOAM(){
     CpuFastSet(oam_backbuffer, OAM, ((sizeof(OBJATTR)*128)>>2) | COPY32);
+}
+
+void updateBgPos(Position* bgPos){
+    BG_OFFSET[0].x = bgPos->x;
+    BG_OFFSET[0].y = bgPos->y;
 }
 
 int main(void) {
@@ -216,15 +267,22 @@ int main(void) {
     Player player = initPlayer();
     updatePlayerSprite(&player);
 
+    Position bgPos;
+    bgPos.x = 0;
+    bgPos.y = 0;
+
     Directions keys = heldKeys();
 
     while (1) {
         VBlankIntrWait();
         updateOAM();
+        updateBgPos(&bgPos);
+
         scanKeys();
 
         keys = heldKeys();
         player = updatePlayer(&player, &keys);
+        bgPos = calculateBgPos(&bgPos, &player, &keys);
 
         updatePlayerSprite(&player);
     }
@@ -232,5 +290,4 @@ int main(void) {
 
 
 // TODO
-// Add windowing
 // Fix sprites
