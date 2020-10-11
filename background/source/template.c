@@ -36,7 +36,7 @@ typedef struct {
     bool right;
 } Directions;
 
-u16 frameTicks = 0;
+u16 ticks = 0;
 
 
 void uploadPaletteMem(){
@@ -107,29 +107,26 @@ u8 calculateFacing(const Player* player, const Directions* keys){
             facing = WEST;
     }
 
-    
-
-
     return facing;
 }
 
 u8 calculateAnimationFrame(const Player* player, const Directions* keys){
     u8 frame = player->animationFrame;
-    u8 framesPerTick = 10;
+    u8 ticksPerFrame = 10;
 
-    if (frameTicks == framesPerTick) {
+    if (ticks == ticksPerFrame) {
         frame += 1;
 
         if (frame == 3)
             frame = 1;
 
-        if (!keys->up & !keys->down & !keys->left & !keys->right)
+        else if (!keys->up & !keys->down & !keys->left & !keys->right)
             frame = 0;
     }
     
-    frameTicks += 1;
-    if (frameTicks > framesPerTick)
-        frameTicks = 0;
+    ticks += 1;
+    if (ticks > ticksPerFrame)
+        ticks = 0;
 
     return frame;
 }
