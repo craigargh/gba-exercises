@@ -84,35 +84,36 @@ Player initPlayer(){
     return player;
 }
 
-u8 calculateFacing(const Player* player, const Directions* newKeys, const Directions* oldKeys){
+u8 calculateFacing(const Player* player, const Directions* keys){
     u16 facing = player->facing;
 
-    if (((newKeys->up | newKeys->down) & (newKeys->left | newKeys->right))){
-        if (newKeys->up & (player->facing==NORTH))
-            facing = NORTH;
-        if (newKeys->right & (player->facing==EAST))
-            facing = EAST;
-        if (newKeys->down & (player->facing==SOUTH))
-            facing = SOUTH;
-        if (newKeys->left & (player->facing==WEST))
-            facing = WEST;
 
-    } else {
-        if (newKeys->up)
+    if (keys->up & (player->facing==NORTH))
+        facing = NORTH;
+    else if (keys->right & (player->facing==EAST))
+        facing = EAST;
+    else if (keys->down & (player->facing==SOUTH))
+        facing = SOUTH;
+    else if (keys->left & (player->facing==WEST))
+        facing = WEST;
+    else {
+        if (keys->up)
             facing = NORTH;
-        if (newKeys->down)
+        if (keys->down)
             facing = SOUTH;
-        if (newKeys->right)
+        if (keys->right)
             facing = EAST;
-        if (newKeys->left)
+        if (keys->left)
             facing = WEST;
     }
+
+    
 
 
     return facing;
 }
 
-u8 calculateAnimationFrame(const Player* player, const Directions* newKeys, const Directions* oldKeys){
+u8 calculateAnimationFrame(const Player* player, const Directions* keys){
     u8 frame = player->animationFrame;
     u8 framesPerTick = 10;
 
@@ -122,7 +123,7 @@ u8 calculateAnimationFrame(const Player* player, const Directions* newKeys, cons
         if (frame == 3)
             frame = 1;
 
-        if (!newKeys->up & !newKeys->down & !newKeys->left & !newKeys->right)
+        if (!keys->up & !keys->down & !keys->left & !keys->right)
             frame = 0;
     }
     
@@ -133,21 +134,21 @@ u8 calculateAnimationFrame(const Player* player, const Directions* newKeys, cons
     return frame;
 }
 
-Player updatePlayer(const Player* player, const Directions* newKeys, const Directions* oldKeys){
-    u16 facing = calculateFacing(player, newKeys, oldKeys);
-    u16 animationFrame = calculateAnimationFrame(player, newKeys, oldKeys);
+Player updatePlayer(const Player* player, const Directions* keys){
+    u16 facing = calculateFacing(player, keys);
+    u16 animationFrame = calculateAnimationFrame(player, keys);
 
     int xMove = 0;
     int yMove = 0;
 
-    if (newKeys->up)
+    if (keys->up)
         yMove = -1;
-    else if (newKeys->down)
+    else if (keys->down)
         yMove = 1;
 
-    if (newKeys->right)
+    if (keys->right)
         xMove = 1;
-    else if (newKeys->left)
+    else if (keys->left)
         xMove = -1;
 
 
@@ -218,21 +219,17 @@ int main(void) {
     Player player = initPlayer();
     updatePlayerSprite(&player);
 
-    Directions newKeys = heldKeys();
-    Directions oldKeys = newKeys;
-    
+    Directions keys = heldKeys();
 
     while (1) {
         VBlankIntrWait();
         updateOAM();
         scanKeys();
 
-        newKeys = heldKeys();
-        player = updatePlayer(&player, &newKeys, &oldKeys);
+        keys = heldKeys();
+        player = updatePlayer(&player, &keys);
 
         updatePlayerSprite(&player);
-
-        oldKeys = newKeys;
     }
 }
 
