@@ -14,23 +14,29 @@ typedef std::function<void()> voidFunction;
 
 
 // To refactor:
-// - Add category to registerListener to allow for menu, game, etc.
-// - Add managerState to allow menu, game etc.
 // - Move event keys to constants 
 // - Split into header files and cpp files for declarations and definitions
+// - Add event for pause and set game state to "paused"
+
+class EventCallable {
+public:
+    std::string category;
+    voidFunction callable;
+
+    EventCallable(std::string ctgry, voidFunction func){
+        category = ctgry;
+        callable = func;
+    };
+};
 
 
 class InputManager{
 public:
-    std::map<std::string, std::vector<voidFunction>> listenerMap;
+    std::map<std::string, std::vector<EventCallable>> listenerMap;
     std::vector<std::tuple<u8, std::string>> keyMaps;
+    std::string state = "game";
 
     InputManager(){
-        listenerMap.emplace("up", std::vector<voidFunction>());
-        listenerMap.emplace("down", std::vector<voidFunction>());
-        listenerMap.emplace("left", std::vector<voidFunction>());
-        listenerMap.emplace("right", std::vector<voidFunction>());
-
         keyMaps.push_back(std::make_tuple(KEY_UP, "up"));
         keyMaps.push_back(std::make_tuple(KEY_DOWN, "down"));
         keyMaps.push_back(std::make_tuple(KEY_RIGHT, "right"));
@@ -38,7 +44,7 @@ public:
     };
 
     void registerListener(std::string eventName, voidFunction func){
-        listenerMap[eventName].push_back(func);
+        listenerMap[eventName].push_back(EventCallable("game", func));
     };
 
     void pollInput(){
@@ -49,15 +55,22 @@ public:
             u8 keyCode = std::get<0>(keyMaps[i]);
             std::string eventKey = std::get<1>(keyMaps[i]);
 
-            if (keysPressed & keyCode){
-                std::vector<voidFunction> funcs = listenerMap.find(eventKey)->second;
-                
-                for (u8 i=0; i < funcs.size(); i++){
-                    funcs[i]();
+            if (! (keysPressed & keyCode)){
+                continue;
+            }
+
+            std::vector<EventCallable> eventCallable = listenerMap.find(eventKey)->second;
+
+            for (u8 i=0; i < eventCallable.size(); i++){
+                if (state != eventCallable[i].category){
+                   continue;
                 }
-            }    
-        }
-    }
+
+                eventCallable[i].callable();
+            }
+            
+        }    
+    }    
 };
 
 
