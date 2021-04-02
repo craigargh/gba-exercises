@@ -10,6 +10,7 @@
 #include "gameobjects.hpp"
 
 OBJATTR oam_backbuffer[128];
+Sprite* player;
 
 
 void uploadPaletteMem(){
@@ -30,8 +31,24 @@ void initGameboy(){
     uploadTileMem();
 }
 
-Sprite makeCharacterSprite(u16 baseTile, u8 x, u8 y, u8 bufferIndex){
-    Animation animation (baseTile);
+void movePlayerNorth(){
+    player->faceNorth();
+}
+
+void movePlayerSouth(){
+    player->faceSouth();
+}
+
+void movePlayerEast(){
+    player->faceEast();
+}
+
+void movePlayerWest(){
+    player->faceWest();
+}
+
+Sprite makeCharacterSprite(u8 x, u8 y, u8 bufferIndex, bool flip=false){
+    Animation animation (512);
     animation.frames.push_back(AnimationFrame(0, 8));
     animation.frames.push_back(AnimationFrame(1, 10));
     animation.frames.push_back(AnimationFrame(0, 8));
@@ -39,8 +56,37 @@ Sprite makeCharacterSprite(u16 baseTile, u8 x, u8 y, u8 bufferIndex){
 
     Sprite character (&oam_backbuffer[bufferIndex], x, y);
     character.animation = animation;
+
     return character;
 };
+
+void registerPlayerListeners(){
+    eventManager.registerListener("up", movePlayerNorth);
+    eventManager.registerListener("down", movePlayerSouth);
+    eventManager.registerListener("left", movePlayerWest);
+    eventManager.registerListener("right", movePlayerEast);
+}
+
+void pollInput(){
+    scanKeys();
+    u16 keysPressed = keysHeld();
+
+    if (keysPressed & KEY_UP){
+        eventManager.listenerMap.find("up")->second();
+    } 
+    
+    if (keysPressed & KEY_DOWN) {
+        eventManager.listenerMap.find("down")->second();
+    } 
+    
+    if (keysPressed & KEY_RIGHT) {
+        eventManager.listenerMap.find("right")->second();
+    } 
+    
+    if (keysPressed & KEY_LEFT){
+        eventManager.listenerMap.find("left")->second();
+    }
+}
 
 int main() {
     initGameboy();
@@ -49,11 +95,15 @@ int main() {
     u8 halfHeight = SCREEN_HEIGHT >> 1;
 
     std::vector<Sprite> sprites;
-    sprites.push_back(makeCharacterSprite(512, halfWidth - 24, halfHeight - 8, 0));
-    sprites.push_back(makeCharacterSprite(524, halfWidth - 8, halfHeight - 8, 1));
-    sprites.push_back(makeCharacterSprite(536, halfWidth + 8, halfHeight - 8, 2));
+    sprites.push_back(makeCharacterSprite(halfWidth - 28, halfHeight - 8, 0));
+
+    player = &sprites[0];
+
+    registerPlayerListeners();
 
     while(1){
+        pollInput();
+
         for (u8 i = 0; i < sprites.size(); i++) {
             sprites[i].update();
         }
