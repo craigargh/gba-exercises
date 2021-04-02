@@ -4,24 +4,62 @@
 #include <string>
 #include <functional>
 #include <map>
+#include <tuple>
 
 
-typedef int (*VoidFunction) ();
+typedef std::function<void()> voidFunction;
 
 #define min(x,y) (x > y ? y : x)
 #define max(x,y) (x < y ? y : x)
 
-class InputEvent{
-public:
-    std::map<std::string, std::function<void()>> listenerMap;
 
-    void registerListener(std::string eventName, std::function<void()> func){
-        listenerMap.insert(std::pair<std::string, std::function<void()>>(eventName, func));
+// To refactor:
+// - Add category to registerListener to allow for menu, game, etc.
+// - Add managerState to allow menu, game etc.
+
+
+class InputManager{
+public:
+    std::map<std::string, std::vector<voidFunction>> listenerMap;
+
+    InputManager(){
+        listenerMap.emplace("up", std::vector<voidFunction>());
+        listenerMap.emplace("down", std::vector<voidFunction>());
+        listenerMap.emplace("left", std::vector<voidFunction>());
+        listenerMap.emplace("right", std::vector<voidFunction>());
     };
+
+    void registerListener(std::string eventName, voidFunction func){
+        listenerMap[eventName].push_back(func);
+    };
+
+    void pollInput(){
+        scanKeys();
+        u16 keysPressed = keysHeld();
+
+        std::vector<std::tuple<u8, std::string>> keyMaps;
+        keyMaps.push_back(std::make_tuple(KEY_UP, "up"));
+        keyMaps.push_back(std::make_tuple(KEY_DOWN, "down"));
+        keyMaps.push_back(std::make_tuple(KEY_RIGHT, "right"));
+        keyMaps.push_back(std::make_tuple(KEY_LEFT, "left"));
+
+        for (u8 i = 0; i < keyMaps.size(); i++){
+            u8 keyCode = std::get<0>(keyMaps[i]);
+            std::string eventKey = std::get<1>(keyMaps[i]);
+
+            if (keysPressed & keyCode){
+                std::vector<voidFunction> funcs = listenerMap.find(eventKey)->second;
+                
+                for (u8 i=0; i < funcs.size(); i++){
+                    funcs[i]();
+                }
+            }    
+        }
+    }
 };
 
 
-InputEvent eventManager;
+InputManager eventManager;
 
 
 class AnimationFrame{
@@ -146,33 +184,9 @@ class StaticObject;
 
 class Trigger;
 
-
-Sprite* player;
-
-void registerPlayerListeners(){
+void registerPlayerListeners(Sprite* player){
     eventManager.registerListener("up", std::bind(&Sprite::faceNorth, player));
     eventManager.registerListener("down", std::bind(&Sprite::faceSouth, player));
     eventManager.registerListener("left", std::bind(&Sprite::faceWest, player));
     eventManager.registerListener("right", std::bind(&Sprite::faceEast, player));
-}
-
-void pollInput(){
-    scanKeys();
-    u16 keysPressed = keysHeld();
-
-    if (keysPressed & KEY_UP){
-        eventManager.listenerMap.find("up")->second();
-    } 
-    
-    if (keysPressed & KEY_DOWN) {
-        eventManager.listenerMap.find("down")->second();
-    } 
-    
-    if (keysPressed & KEY_RIGHT) {
-        eventManager.listenerMap.find("right")->second();
-    } 
-    
-    if (keysPressed & KEY_LEFT){
-        eventManager.listenerMap.find("left")->second();
-    }
 }

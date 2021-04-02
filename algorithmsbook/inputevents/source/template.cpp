@@ -11,8 +11,6 @@
 
 OBJATTR oam_backbuffer[128];
 
-
-
 void uploadPaletteMem(){
     CpuFastSet(asukaPal, SPRITE_PALETTE, (asukaPalLen >> 2) | COPY32);
 }
@@ -53,14 +51,11 @@ int main() {
 
     std::vector<Sprite> sprites;
     sprites.push_back(makeCharacterSprite(halfWidth - 28, halfHeight - 8, 0));
-    player = &sprites[0];
 
-    registerPlayerListeners();
+    registerPlayerListeners(&sprites[0]);
 
     while(1){
-        pollInput();
-
-        std::bind(&Sprite::faceNorth, player);
+        eventManager.pollInput();
 
         for (u8 i = 0; i < sprites.size(); i++) {
             sprites[i].update();
