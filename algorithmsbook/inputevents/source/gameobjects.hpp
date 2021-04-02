@@ -16,17 +16,24 @@ typedef std::function<void()> voidFunction;
 // To refactor:
 // - Add category to registerListener to allow for menu, game, etc.
 // - Add managerState to allow menu, game etc.
+// - Move event keys to constants 
 
 
 class InputManager{
 public:
     std::map<std::string, std::vector<voidFunction>> listenerMap;
+    std::vector<std::tuple<u8, std::string>> keyMaps;
 
     InputManager(){
         listenerMap.emplace("up", std::vector<voidFunction>());
         listenerMap.emplace("down", std::vector<voidFunction>());
         listenerMap.emplace("left", std::vector<voidFunction>());
         listenerMap.emplace("right", std::vector<voidFunction>());
+
+        keyMaps.push_back(std::make_tuple(KEY_UP, "up"));
+        keyMaps.push_back(std::make_tuple(KEY_DOWN, "down"));
+        keyMaps.push_back(std::make_tuple(KEY_RIGHT, "right"));
+        keyMaps.push_back(std::make_tuple(KEY_LEFT, "left"));
     };
 
     void registerListener(std::string eventName, voidFunction func){
@@ -36,12 +43,6 @@ public:
     void pollInput(){
         scanKeys();
         u16 keysPressed = keysHeld();
-
-        std::vector<std::tuple<u8, std::string>> keyMaps;
-        keyMaps.push_back(std::make_tuple(KEY_UP, "up"));
-        keyMaps.push_back(std::make_tuple(KEY_DOWN, "down"));
-        keyMaps.push_back(std::make_tuple(KEY_RIGHT, "right"));
-        keyMaps.push_back(std::make_tuple(KEY_LEFT, "left"));
 
         for (u8 i = 0; i < keyMaps.size(); i++){
             u8 keyCode = std::get<0>(keyMaps[i]);
