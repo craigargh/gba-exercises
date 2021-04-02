@@ -144,6 +144,35 @@ public:
 
 class StaticObject;
 
-
 class Trigger;
 
+
+Sprite* player;
+
+void registerPlayerListeners(){
+    eventManager.registerListener("up", std::bind(&Sprite::faceNorth, player));
+    eventManager.registerListener("down", std::bind(&Sprite::faceSouth, player));
+    eventManager.registerListener("left", std::bind(&Sprite::faceWest, player));
+    eventManager.registerListener("right", std::bind(&Sprite::faceEast, player));
+}
+
+void pollInput(){
+    scanKeys();
+    u16 keysPressed = keysHeld();
+
+    if (keysPressed & KEY_UP){
+        eventManager.listenerMap.find("up")->second();
+    } 
+    
+    if (keysPressed & KEY_DOWN) {
+        eventManager.listenerMap.find("down")->second();
+    } 
+    
+    if (keysPressed & KEY_RIGHT) {
+        eventManager.listenerMap.find("right")->second();
+    } 
+    
+    if (keysPressed & KEY_LEFT){
+        eventManager.listenerMap.find("left")->second();
+    }
+}
