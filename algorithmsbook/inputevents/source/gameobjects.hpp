@@ -1,10 +1,13 @@
 #include <gba_base.h>
 #include <gba_sprites.h>
 #include <gba_input.h>
+#include <gba_video.h>
+
 #include <string>
 #include <functional>
 #include <map>
 #include <tuple>
+#include <vector>
 
 
 typedef std::function<void()> voidFunction;
@@ -15,7 +18,6 @@ typedef std::function<void()> voidFunction;
 
 // To refactor:
 // - Move event keys to constants 
-// - Split into header files and cpp files for declarations and definitions
 // - Add event for pause and set game state to "paused"
 
 
@@ -24,10 +26,7 @@ public:
     std::string stateType;
     voidFunction callable;
 
-    EventCallable(std::string ctgry, voidFunction func){
-        stateType = ctgry;
-        callable = func;
-    };
+    EventCallable(std::string ctgry, voidFunction func);
 };
 
 
@@ -37,45 +36,12 @@ public:
     std::vector<std::tuple<u8, std::string>> keyMaps;
     std::string state = "game";
 
-    InputManager(){
-        keyMaps.push_back(std::make_tuple(KEY_UP, "up"));
-        keyMaps.push_back(std::make_tuple(KEY_DOWN, "down"));
-        keyMaps.push_back(std::make_tuple(KEY_RIGHT, "right"));
-        keyMaps.push_back(std::make_tuple(KEY_LEFT, "left"));
-    };
+    InputManager();
 
-    void registerListener(std::string eventName, voidFunction func){
-        listenerMap[eventName].push_back(EventCallable("game", func));
-    };
+    void registerListener(std::string eventName, voidFunction func);
 
-    void pollInput(){
-        scanKeys();
-        u16 keysPressed = keysHeld();
-
-        for (u8 i = 0; i < keyMaps.size(); i++){
-            u8 keyCode = std::get<0>(keyMaps[i]);
-            std::string eventKey = std::get<1>(keyMaps[i]);
-
-            if (! (keysPressed & keyCode)){
-                continue;
-            }
-
-            std::vector<EventCallable> eventCallable = listenerMap.find(eventKey)->second;
-
-            for (u8 i=0; i < eventCallable.size(); i++){
-                if (state != eventCallable[i].stateType){
-                   continue;
-                }
-
-                eventCallable[i].callable();
-            }
-            
-        }    
-    }    
+    void pollInput();
 };
-
-
-InputManager eventManager;
 
 
 class AnimationFrame{
@@ -83,10 +49,7 @@ public:
     u8 duration;
     u8 tileOffset;
 
-    AnimationFrame(u8 tile, u8 length){
-        tileOffset = tile;
-        duration = length;
-    }
+    AnimationFrame(u8 tile, u8 length);
 };
 
 class Animation {
@@ -97,43 +60,15 @@ public:
     u8 frame;
     bool flip = false;
 
-    Animation(){};
+    Animation();
 
-    Animation(u16 baseTileValue){
-        baseTile = baseTileValue;
-        frame = 0;
-        tileSetOffset=0;
-    };
-
-    void tick(){
-        frame ++;
-    }
-
-    AnimationFrame currentFrame(){
-        u8 frameIndex = 0;
-        u8 cumulativeFrames = 0;
-
-        for(u8 i = 0; i <= frames.size(); i++){
-            if (i == frames.size()){
-                frame = 0;
-                frameIndex = 0;
-                break;
-            }
-
-            cumulativeFrames += frames[i].duration;
-
-            if (frame < cumulativeFrames){
-                frameIndex = i;
-                break;
-            }
-        }
-
-        return frames[frameIndex];
-    };
-
-    u16 tile(){
-        return baseTile + tileSetOffset + (currentFrame().tileOffset * 4);
-    }
+    Animation(u16 baseTileValue);
+    
+    void tick();
+    
+    AnimationFrame currentFrame();
+    
+    u16 tile();
 };
 
 
@@ -144,55 +79,21 @@ public:
     OBJATTR* oam;
     Animation animation;
 
-    Sprite(){};
+    Sprite();
 
-    Sprite(OBJATTR* oamRef, u8 xPos, u8 yPos){
-        oam = oamRef;
-        x = xPos;
-        y = yPos;
-    };
+    Sprite(OBJATTR* oamRef, u8 xPos, u8 yPos);
 
-    void draw(){
-        oam->attr0 = OBJ_16_COLOR | ATTR0_SQUARE | OBJ_Y(y);
-        oam->attr1 = ATTR1_SIZE_16 | OBJ_X(x);
-        oam->attr2 = animation.tile() | ATTR2_PALETTE(0);
+    void draw();
 
-        if (animation.flip){
-            oam->attr1 |= OBJ_HFLIP;
-        }
-    };
+    void update();
 
-    void update(){
-        animation.tick();
-    };
+    void faceNorth();
 
-    void faceNorth(){
-        animation.tileSetOffset = 24;
-        animation.flip = false;
+    void faceSouth();
 
-        y = max(y - 1, 0);
-    };
+    void faceEast();
 
-    void faceSouth(){
-        animation.tileSetOffset = 0;
-        animation.flip = false;
-
-        y = min(y + 1, SCREEN_HEIGHT - 16);
-    };
-
-    void faceEast(){
-        animation.tileSetOffset = 12;
-        animation.flip = true;
-
-        x = min(x + 1, SCREEN_WIDTH - 16);
-    };
-
-    void faceWest(){
-        animation.tileSetOffset = 12;
-        animation.flip = false;
-
-        x = max(x - 1, 0);
-    };
+    void faceWest();
 };
 
 
@@ -200,9 +101,4 @@ class StaticObject;
 
 class Trigger;
 
-void registerPlayerListeners(Sprite* player){
-    eventManager.registerListener("up", std::bind(&Sprite::faceNorth, player));
-    eventManager.registerListener("down", std::bind(&Sprite::faceSouth, player));
-    eventManager.registerListener("left", std::bind(&Sprite::faceWest, player));
-    eventManager.registerListener("right", std::bind(&Sprite::faceEast, player));
-}
+void registerPlayerListeners(InputManager* eventManager, Sprite* player);

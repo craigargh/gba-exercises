@@ -52,7 +52,8 @@ int main() {
     std::vector<Sprite> sprites;
     sprites.push_back(makeCharacterSprite(halfWidth - 28, halfHeight - 8, 0));
 
-    registerPlayerListeners(&sprites[0]);
+    InputManager eventManager;
+    registerPlayerListeners(&eventManager, &sprites[0]);
 
     while(1){
         eventManager.pollInput();
