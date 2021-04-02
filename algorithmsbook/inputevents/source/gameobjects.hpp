@@ -18,6 +18,7 @@ typedef std::function<void()> voidFunction;
 // - Split into header files and cpp files for declarations and definitions
 // - Add event for pause and set game state to "paused"
 
+
 class EventCallable {
 public:
     std::string stateType;
