@@ -20,11 +20,11 @@ typedef std::function<void()> voidFunction;
 
 class EventCallable {
 public:
-    std::string category;
+    std::string stateType;
     voidFunction callable;
 
     EventCallable(std::string ctgry, voidFunction func){
-        category = ctgry;
+        stateType = ctgry;
         callable = func;
     };
 };
@@ -62,7 +62,7 @@ public:
             std::vector<EventCallable> eventCallable = listenerMap.find(eventKey)->second;
 
             for (u8 i=0; i < eventCallable.size(); i++){
-                if (state != eventCallable[i].category){
+                if (state != eventCallable[i].stateType){
                    continue;
                 }
 
