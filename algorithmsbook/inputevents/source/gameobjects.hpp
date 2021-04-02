@@ -17,6 +17,7 @@ typedef std::function<void()> voidFunction;
 // - Add category to registerListener to allow for menu, game, etc.
 // - Add managerState to allow menu, game etc.
 // - Move event keys to constants 
+// - Split into header files and cpp files for declarations and definitions
 
 
 class InputManager{
