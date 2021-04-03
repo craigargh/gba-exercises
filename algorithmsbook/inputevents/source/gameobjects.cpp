@@ -8,15 +8,15 @@ EventCallable::EventCallable(std::string ctgry, voidFunction func){
 
 
 InputManager::InputManager(){
-    keyMaps.push_back(std::make_tuple(KEY_UP, "up"));
-    keyMaps.push_back(std::make_tuple(KEY_DOWN, "down"));
-    keyMaps.push_back(std::make_tuple(KEY_RIGHT, "right"));
-    keyMaps.push_back(std::make_tuple(KEY_LEFT, "left"));
+    keyMaps.push_back(std::make_tuple(KEY_UP, EVENT_UP));
+    keyMaps.push_back(std::make_tuple(KEY_DOWN, EVENT_DOWN));
+    keyMaps.push_back(std::make_tuple(KEY_RIGHT, EVENT_RIGHT));
+    keyMaps.push_back(std::make_tuple(KEY_LEFT, EVENT_LEFT));
 };
 
 
-void InputManager::registerListener(std::string eventName, voidFunction func){
-    listenerMap[eventName].push_back(EventCallable("game", func));
+void InputManager::registerListener(std::string eventName, std::string stateType, voidFunction func){
+    listenerMap[eventName].push_back(EventCallable(stateType, func));
 };
 
 void InputManager::pollInput(){
@@ -93,9 +93,6 @@ u16 Animation::tile(){
 
 
 
-
-
-
 Sprite::Sprite(){};
 
 Sprite::Sprite(OBJATTR* oamRef, u8 xPos, u8 yPos){
@@ -149,13 +146,9 @@ void Sprite::faceWest(){
 
 
 
-
-
-
-
 void registerPlayerListeners(InputManager* eventManager, Sprite* player){
-    eventManager->registerListener("up", std::bind(&Sprite::faceNorth, player));
-    eventManager->registerListener("down", std::bind(&Sprite::faceSouth, player));
-    eventManager->registerListener("left", std::bind(&Sprite::faceWest, player));
-    eventManager->registerListener("right", std::bind(&Sprite::faceEast, player));
+    eventManager->registerListener(EVENT_UP, GAME_RUNNING, std::bind(&Sprite::faceNorth, player));
+    eventManager->registerListener(EVENT_DOWN, GAME_RUNNING, std::bind(&Sprite::faceSouth, player));
+    eventManager->registerListener(EVENT_LEFT, GAME_RUNNING, std::bind(&Sprite::faceWest, player));
+    eventManager->registerListener(EVENT_RIGHT, GAME_RUNNING, std::bind(&Sprite::faceEast, player));
 }

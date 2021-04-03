@@ -16,8 +16,15 @@ typedef std::function<void()> voidFunction;
 #define max(x,y) (x < y ? y : x)
 
 
+const std::string GAME_RUNNING = "game";
+const std::string GAME_PAUSED = "paused";
+
+const std::string EVENT_UP = "up";
+const std::string EVENT_DOWN = "down";
+const std::string EVENT_LEFT = "left";
+const std::string EVENT_RIGHT = "right";
+
 // To refactor:
-// - Move event keys to constants 
 // - Add event for pause and set game state to "paused"
 
 
@@ -34,11 +41,11 @@ class InputManager{
 public:
     std::map<std::string, std::vector<EventCallable>> listenerMap;
     std::vector<std::tuple<u8, std::string>> keyMaps;
-    std::string state = "game";
+    std::string state = GAME_RUNNING;
 
     InputManager();
 
-    void registerListener(std::string eventName, voidFunction func);
+    void registerListener(std::string eventName, std::string stateType, voidFunction func);
 
     void pollInput();
 };
