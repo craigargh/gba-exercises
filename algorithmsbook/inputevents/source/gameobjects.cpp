@@ -8,10 +8,11 @@ EventCallable::EventCallable(std::string ctgry, voidFunction func){
 
 
 InputManager::InputManager(){
-    keyMaps.push_back(std::make_tuple(KEY_UP, EVENT_UP));
-    keyMaps.push_back(std::make_tuple(KEY_DOWN, EVENT_DOWN));
-    keyMaps.push_back(std::make_tuple(KEY_RIGHT, EVENT_RIGHT));
-    keyMaps.push_back(std::make_tuple(KEY_LEFT, EVENT_LEFT));
+    keyMaps.push_back(std::make_tuple(KEY_UP, KEY_HELD, EVENT_UP));
+    keyMaps.push_back(std::make_tuple(KEY_DOWN, KEY_HELD, EVENT_DOWN));
+    keyMaps.push_back(std::make_tuple(KEY_RIGHT, KEY_HELD, EVENT_RIGHT));
+    keyMaps.push_back(std::make_tuple(KEY_LEFT, KEY_HELD, EVENT_LEFT));
+    keyMaps.push_back(std::make_tuple(KEY_START, KEY_PRESS, EVENT_PAUSE));
 };
 
 
@@ -21,29 +22,49 @@ void InputManager::registerListener(std::string eventName, std::string stateType
 
 void InputManager::pollInput(){
     scanKeys();
-    u16 keysPressed = keysHeld();
+    u16 heldKeys = keysHeld();
+    u16 pressedKeys = keysDown();
 
     for (u8 i = 0; i < keyMaps.size(); i++){
         u8 keyCode = std::get<0>(keyMaps[i]);
-        std::string eventKey = std::get<1>(keyMaps[i]);
+        std::string keyAction = std::get<1>(keyMaps[i]);
+        std::string eventKey = std::get<2>(keyMaps[i]);
 
-        if (! (keysPressed & keyCode)){
+        if (keyAction == KEY_HELD && (! (heldKeys & keyCode))){
+            continue;
+        }
+
+        if (keyAction == KEY_PRESS && (! (pressedKeys & keyCode))){
             continue;
         }
 
         std::vector<EventCallable> eventCallable = listenerMap.find(eventKey)->second;
+        std::vector<EventCallable> activeEvents;
 
         for (u8 i=0; i < eventCallable.size(); i++){
             if (state != eventCallable[i].stateType){
                continue;
             }
 
-            eventCallable[i].callable();
+            activeEvents.push_back(eventCallable[i]);
         }
-        
-    }    
-}
 
+
+        for (u8 i=0; i < activeEvents.size(); i++){
+            activeEvents[i].callable();
+        }
+    }    
+}    
+
+
+void InputManager::pause(){
+    state = GAME_PAUSED;
+};
+
+
+void InputManager::unpause(){
+    state = GAME_RUNNING;
+};
 
 AnimationFrame::AnimationFrame(u8 tile, u8 length){
     tileOffset = tile;
@@ -146,9 +167,12 @@ void Sprite::faceWest(){
 
 
 
-void registerPlayerListeners(InputManager* eventManager, Sprite* player){
+void registerInputListeners(InputManager* eventManager, Sprite* player){
     eventManager->registerListener(EVENT_UP, GAME_RUNNING, std::bind(&Sprite::faceNorth, player));
     eventManager->registerListener(EVENT_DOWN, GAME_RUNNING, std::bind(&Sprite::faceSouth, player));
     eventManager->registerListener(EVENT_LEFT, GAME_RUNNING, std::bind(&Sprite::faceWest, player));
     eventManager->registerListener(EVENT_RIGHT, GAME_RUNNING, std::bind(&Sprite::faceEast, player));
+
+    eventManager->registerListener(EVENT_PAUSE, GAME_PAUSED, std::bind(&InputManager::unpause, eventManager));
+    eventManager->registerListener(EVENT_PAUSE, GAME_RUNNING, std::bind(&InputManager::pause, eventManager));
 }

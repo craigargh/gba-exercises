@@ -9,6 +9,7 @@
 #include "asuka.h"
 #include "gameobjects.hpp"
 
+
 OBJATTR oam_backbuffer[128];
 
 void uploadPaletteMem(){
@@ -53,7 +54,7 @@ int main() {
     sprites.push_back(makeCharacterSprite(halfWidth - 28, halfHeight - 8, 0));
 
     InputManager eventManager;
-    registerPlayerListeners(&eventManager, &sprites[0]);
+    registerInputListeners(&eventManager, &sprites[0]);
 
     while(1){
         eventManager.pollInput();

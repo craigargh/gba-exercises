@@ -19,10 +19,15 @@ typedef std::function<void()> voidFunction;
 const std::string GAME_RUNNING = "game";
 const std::string GAME_PAUSED = "paused";
 
+const std::string KEY_HELD = "held";
+const std::string KEY_PRESS = "press";
+
 const std::string EVENT_UP = "up";
 const std::string EVENT_DOWN = "down";
 const std::string EVENT_LEFT = "left";
 const std::string EVENT_RIGHT = "right";
+const std::string EVENT_PAUSE = "pause";
+
 
 // To refactor:
 // - Add event for pause and set game state to "paused"
@@ -40,7 +45,7 @@ public:
 class InputManager{
 public:
     std::map<std::string, std::vector<EventCallable>> listenerMap;
-    std::vector<std::tuple<u8, std::string>> keyMaps;
+    std::vector<std::tuple<u8, std::string, std::string>> keyMaps;
     std::string state = GAME_RUNNING;
 
     InputManager();
@@ -48,6 +53,10 @@ public:
     void registerListener(std::string eventName, std::string stateType, voidFunction func);
 
     void pollInput();
+
+    void pause();
+
+    void unpause();
 };
 
 
@@ -108,4 +117,4 @@ class StaticObject;
 
 class Trigger;
 
-void registerPlayerListeners(InputManager* eventManager, Sprite* player);
+void registerInputListeners(InputManager* eventManager, Sprite* player);
