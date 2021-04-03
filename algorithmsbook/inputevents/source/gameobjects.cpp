@@ -38,15 +38,15 @@ void InputManager::pollInput(){
             continue;
         }
 
-        std::vector<EventCallable> eventCallable = listenerMap.find(eventKey)->second;
+        std::vector<EventCallable> allEvents = listenerMap.find(eventKey)->second;
         std::vector<EventCallable> activeEvents;
 
-        for (u8 i=0; i < eventCallable.size(); i++){
-            if (state != eventCallable[i].stateType){
+        for (u8 i=0; i < allEvents.size(); i++){
+            if (state != allEvents[i].stateType){
                continue;
             }
 
-            activeEvents.push_back(eventCallable[i]);
+            activeEvents.push_back(allEvents[i]);
         }
 
 

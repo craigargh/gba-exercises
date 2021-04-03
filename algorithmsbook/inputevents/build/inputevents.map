@@ -6384,21 +6384,21 @@ Linker script and memory map
  .debug_frame   0x0000000000000558       0xb0 /opt/devkitpro/libgba/lib/libgba.a(interrupt.o)
  .debug_frame   0x0000000000000608       0x80 /opt/devkitpro/libgba/lib/libgba.a(input.o)
 
-.debug_str      0x0000000000000000    0x2f1ab
+.debug_str      0x0000000000000000    0x2f1a7
  *(.debug_str)
- .debug_str     0x0000000000000000    0x29a60 gameobjects.o
-                                      0x2a479 (size before relaxing)
- .debug_str     0x0000000000029a60     0x5395 template.o
+ .debug_str     0x0000000000000000    0x29a5c gameobjects.o
+                                      0x2a475 (size before relaxing)
+ .debug_str     0x0000000000029a5c     0x5395 template.o
                                       0x20c07 (size before relaxing)
- .debug_str     0x000000000002edf5       0xc1 asuka.o
+ .debug_str     0x000000000002edf1       0xc1 asuka.o
                                         0x150 (size before relaxing)
- .debug_str     0x000000000002eeb6       0xda /opt/devkitpro/libgba/lib/libgba.a(CpuSet.o)
+ .debug_str     0x000000000002eeb2       0xda /opt/devkitpro/libgba/lib/libgba.a(CpuSet.o)
                                         0x18e (size before relaxing)
- .debug_str     0x000000000002ef90      0x116 /opt/devkitpro/libgba/lib/libgba.a(interrupt.o)
+ .debug_str     0x000000000002ef8c      0x116 /opt/devkitpro/libgba/lib/libgba.a(interrupt.o)
                                         0x310 (size before relaxing)
- .debug_str     0x000000000002f0a6       0xa5 /opt/devkitpro/libgba/lib/libgba.a(input.o)
+ .debug_str     0x000000000002f0a2       0xa5 /opt/devkitpro/libgba/lib/libgba.a(input.o)
                                         0x21b (size before relaxing)
- .debug_str     0x000000000002f14b       0x60 /opt/devkitpro/libgba/lib/libgba.a(InterruptDispatcher.o)
+ .debug_str     0x000000000002f147       0x60 /opt/devkitpro/libgba/lib/libgba.a(InterruptDispatcher.o)
                                          0xa0 (size before relaxing)
 
 .debug_loc      0x0000000000000000    0x2a43e
