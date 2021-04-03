@@ -4997,8 +4997,8 @@ Linker script and memory map
                 0x00000000080002b8                Sprite::faceWest()
                 0x00000000080002d0                InputManager::pause()
                 0x00000000080002e4                InputManager::unpause()
-                0x00000000080002fc                EventCallable::EventCallable(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::function<void ()>)
-                0x00000000080002fc                EventCallable::EventCallable(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::function<void ()>)
+                0x00000000080002fc                EventBinding::EventBinding(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::function<void ()>)
+                0x00000000080002fc                EventBinding::EventBinding(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::function<void ()>)
                 0x0000000008000380                AnimationFrame::AnimationFrame(unsigned char, unsigned char)
                 0x0000000008000380                AnimationFrame::AnimationFrame(unsigned char, unsigned char)
                 0x0000000008000388                Animation::Animation()
@@ -5017,8 +5017,8 @@ Linker script and memory map
                 0x00000000080004a8                InputManager::pollInput()
                 0x0000000008000a0c                InputManager::InputManager()
                 0x0000000008000a0c                InputManager::InputManager()
-                0x00000000080012a4                InputManager::registerListener(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::function<void ()>)
-                0x00000000080015f0                registerInputListeners(InputManager*, Sprite*)
+                0x00000000080012a4                InputManager::registerBinding(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::function<void ()>)
+                0x00000000080015f0                registerInputBindings(InputManager*, Sprite*)
  .text._ZNSt17_Function_handlerIFvvESt5_BindIFM12InputManagerFvvEPS2_EEE9_M_invokeERKSt9_Any_data
                 0x0000000008001d4c       0x24 gameobjects.o
                 0x0000000008001d4c                std::_Function_handler<void (), std::_Bind<void (InputManager::*(InputManager*))()> >::_M_invoke(std::_Any_data const&)
@@ -5032,24 +5032,24 @@ Linker script and memory map
                 0x0000000008001dd0       0x3c gameobjects.o
                 0x0000000008001dd0                std::_Function_handler<void (), std::_Bind<void (Sprite::*(Sprite*))()> >::_M_manager(std::_Any_data&, std::_Any_data const&, std::_Manager_operation)
  .text.startup  0x0000000008001e0c       0xec gameobjects.o
- .text._ZNSt6vectorI13EventCallableSaIS0_EE17_M_realloc_insertIJRKS0_EEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT_
+ .text._ZNSt6vectorI12EventBindingSaIS0_EE17_M_realloc_insertIJRKS0_EEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT_
                 0x0000000008001ef8      0x28c gameobjects.o
-                0x0000000008001ef8                void std::vector<EventCallable, std::allocator<EventCallable> >::_M_realloc_insert<EventCallable const&>(__gnu_cxx::__normal_iterator<EventCallable*, std::vector<EventCallable, std::allocator<EventCallable> > >, EventCallable const&)
+                0x0000000008001ef8                void std::vector<EventBinding, std::allocator<EventBinding> >::_M_realloc_insert<EventBinding const&>(__gnu_cxx::__normal_iterator<EventBinding*, std::vector<EventBinding, std::allocator<EventBinding> > >, EventBinding const&)
  .text._ZNSt6vectorISt5tupleIJhNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES6_EESaIS7_EE17_M_realloc_insertIJS7_EEEvN9__gnu_cxx17__normal_iteratorIPS7_S9_EEDpOT_
                 0x0000000008002184      0x28c gameobjects.o
                 0x0000000008002184                void std::vector<std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::_M_realloc_insert<std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >(__gnu_cxx::__normal_iterator<std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >*, std::vector<std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > > >, std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >&&)
  .text._ZNSt6vectorISt5tupleIJhNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES6_EESaIS7_EE12emplace_backIJS7_EEEvDpOT_
                 0x0000000008002410       0x84 gameobjects.o
                 0x0000000008002410                void std::vector<std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > > >::emplace_back<std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > > >(std::tuple<unsigned char, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >&&)
- .text._ZNSt6vectorI13EventCallableSaIS0_EE17_M_realloc_insertIJS0_EEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT_
+ .text._ZNSt6vectorI12EventBindingSaIS0_EE17_M_realloc_insertIJS0_EEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT_
                 0x0000000008002494      0x260 gameobjects.o
-                0x0000000008002494                void std::vector<EventCallable, std::allocator<EventCallable> >::_M_realloc_insert<EventCallable>(__gnu_cxx::__normal_iterator<EventCallable*, std::vector<EventCallable, std::allocator<EventCallable> > >, EventCallable&&)
- .text._ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St6vectorI13EventCallableSaIS9_EEESt10_Select1stISC_ESt4lessIS5_ESaISC_EE24_M_get_insert_unique_posERS7_
+                0x0000000008002494                void std::vector<EventBinding, std::allocator<EventBinding> >::_M_realloc_insert<EventBinding>(__gnu_cxx::__normal_iterator<EventBinding*, std::vector<EventBinding, std::allocator<EventBinding> > >, EventBinding&&)
+ .text._ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St6vectorI12EventBindingSaIS9_EEESt10_Select1stISC_ESt4lessIS5_ESaISC_EE24_M_get_insert_unique_posERS7_
                 0x00000000080026f4       0xe4 gameobjects.o
-                0x00000000080026f4                std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventCallable, std::allocator<EventCallable> > >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventCallable, std::allocator<EventCallable> > > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventCallable, std::allocator<EventCallable> > > > >::_M_get_insert_unique_pos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
- .text._ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St6vectorI13EventCallableSaIS9_EEESt10_Select1stISC_ESt4lessIS5_ESaISC_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISC_ERS7_
+                0x00000000080026f4                std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventBinding, std::allocator<EventBinding> > >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventBinding, std::allocator<EventBinding> > > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventBinding, std::allocator<EventBinding> > > > >::_M_get_insert_unique_pos(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+ .text._ZNSt8_Rb_treeINSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEESt4pairIKS5_St6vectorI12EventBindingSaIS9_EEESt10_Select1stISC_ESt4lessIS5_ESaISC_EE29_M_get_insert_hint_unique_posESt23_Rb_tree_const_iteratorISC_ERS7_
                 0x00000000080027d8      0x198 gameobjects.o
-                0x00000000080027d8                std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventCallable, std::allocator<EventCallable> > >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventCallable, std::allocator<EventCallable> > > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventCallable, std::allocator<EventCallable> > > > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventCallable, std::allocator<EventCallable> > > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
+                0x00000000080027d8                std::_Rb_tree<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >, std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventBinding, std::allocator<EventBinding> > >, std::_Select1st<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventBinding, std::allocator<EventBinding> > > >, std::less<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > >, std::allocator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventBinding, std::allocator<EventBinding> > > > >::_M_get_insert_hint_unique_pos(std::_Rb_tree_const_iterator<std::pair<std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const, std::vector<EventBinding, std::allocator<EventBinding> > > >, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&)
  .text.exit     0x0000000008002970       0x5c gameobjects.o
  .text          0x00000000080029cc      0x294 template.o
                 0x00000000080029cc                uploadPaletteMem()
@@ -5538,7 +5538,7 @@ Linker script and memory map
  .rodata.str1.4
                 0x0000000008007214       0x6e gameobjects.o
  *fill*         0x0000000008007282        0x2 ff
- .rodata._ZNSt6vectorI13EventCallableSaIS0_EE17_M_realloc_insertIJRKS0_EEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT_.str1.4
+ .rodata._ZNSt6vectorI12EventBindingSaIS0_EE17_M_realloc_insertIJRKS0_EEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT_.str1.4
                 0x0000000008007284       0x1a gameobjects.o
  .rodata.str1.4
                 0x000000000800729e       0x6e template.o
@@ -6384,21 +6384,21 @@ Linker script and memory map
  .debug_frame   0x0000000000000558       0xb0 /opt/devkitpro/libgba/lib/libgba.a(interrupt.o)
  .debug_frame   0x0000000000000608       0x80 /opt/devkitpro/libgba/lib/libgba.a(input.o)
 
-.debug_str      0x0000000000000000    0x2f1a7
+.debug_str      0x0000000000000000    0x2ef45
  *(.debug_str)
- .debug_str     0x0000000000000000    0x29a5c gameobjects.o
-                                      0x2a475 (size before relaxing)
- .debug_str     0x0000000000029a5c     0x5395 template.o
-                                      0x20c07 (size before relaxing)
- .debug_str     0x000000000002edf1       0xc1 asuka.o
+ .debug_str     0x0000000000000000    0x297fa gameobjects.o
+                                      0x2a20c (size before relaxing)
+ .debug_str     0x00000000000297fa     0x5395 template.o
+                                      0x20a5e (size before relaxing)
+ .debug_str     0x000000000002eb8f       0xc1 asuka.o
                                         0x150 (size before relaxing)
- .debug_str     0x000000000002eeb2       0xda /opt/devkitpro/libgba/lib/libgba.a(CpuSet.o)
+ .debug_str     0x000000000002ec50       0xda /opt/devkitpro/libgba/lib/libgba.a(CpuSet.o)
                                         0x18e (size before relaxing)
- .debug_str     0x000000000002ef8c      0x116 /opt/devkitpro/libgba/lib/libgba.a(interrupt.o)
+ .debug_str     0x000000000002ed2a      0x116 /opt/devkitpro/libgba/lib/libgba.a(interrupt.o)
                                         0x310 (size before relaxing)
- .debug_str     0x000000000002f0a2       0xa5 /opt/devkitpro/libgba/lib/libgba.a(input.o)
+ .debug_str     0x000000000002ee40       0xa5 /opt/devkitpro/libgba/lib/libgba.a(input.o)
                                         0x21b (size before relaxing)
- .debug_str     0x000000000002f147       0x60 /opt/devkitpro/libgba/lib/libgba.a(InterruptDispatcher.o)
+ .debug_str     0x000000000002eee5       0x60 /opt/devkitpro/libgba/lib/libgba.a(InterruptDispatcher.o)
                                          0xa0 (size before relaxing)
 
 .debug_loc      0x0000000000000000    0x2a43e

@@ -1,7 +1,7 @@
 #include "gameobjects.hpp"
 
 
-EventCallable::EventCallable(std::string ctgry, voidFunction func){
+EventBinding::EventBinding(std::string ctgry, voidFunction func){
     stateType = ctgry;
     callable = func;
 };
@@ -16,8 +16,8 @@ InputManager::InputManager(){
 };
 
 
-void InputManager::registerListener(std::string eventName, std::string stateType, voidFunction func){
-    listenerMap[eventName].push_back(EventCallable(stateType, func));
+void InputManager::registerBinding(std::string eventName, std::string stateType, voidFunction func){
+    bindings[eventName].push_back(EventBinding(stateType, func));
 };
 
 void InputManager::pollInput(){
@@ -38,23 +38,23 @@ void InputManager::pollInput(){
             continue;
         }
 
-        std::vector<EventCallable> allEvents = listenerMap.find(eventKey)->second;
-        std::vector<EventCallable> activeEvents;
+        std::vector<EventBinding> allBindings = bindings.find(eventKey)->second;
+        std::vector<EventBinding> activeBindings;
 
-        for (u8 i=0; i < allEvents.size(); i++){
-            if (state != allEvents[i].stateType){
+        for (u8 i=0; i < allBindings.size(); i++){
+            if (state != allBindings[i].stateType){
                continue;
             }
 
-            activeEvents.push_back(allEvents[i]);
+            activeBindings.push_back(allBindings[i]);
         }
 
 
-        for (u8 i=0; i < activeEvents.size(); i++){
-            activeEvents[i].callable();
+        for (u8 i=0; i < activeBindings.size(); i++){
+            activeBindings[i].callable();
         }
-    }    
-}    
+    }
+}
 
 
 void InputManager::pause(){
@@ -167,12 +167,12 @@ void Sprite::faceWest(){
 
 
 
-void registerInputListeners(InputManager* eventManager, Sprite* player){
-    eventManager->registerListener(EVENT_UP, GAME_RUNNING, std::bind(&Sprite::faceNorth, player));
-    eventManager->registerListener(EVENT_DOWN, GAME_RUNNING, std::bind(&Sprite::faceSouth, player));
-    eventManager->registerListener(EVENT_LEFT, GAME_RUNNING, std::bind(&Sprite::faceWest, player));
-    eventManager->registerListener(EVENT_RIGHT, GAME_RUNNING, std::bind(&Sprite::faceEast, player));
+void registerInputBindings(InputManager* eventManager, Sprite* player){
+    eventManager->registerBinding(EVENT_UP, GAME_RUNNING, std::bind(&Sprite::faceNorth, player));
+    eventManager->registerBinding(EVENT_DOWN, GAME_RUNNING, std::bind(&Sprite::faceSouth, player));
+    eventManager->registerBinding(EVENT_LEFT, GAME_RUNNING, std::bind(&Sprite::faceWest, player));
+    eventManager->registerBinding(EVENT_RIGHT, GAME_RUNNING, std::bind(&Sprite::faceEast, player));
 
-    eventManager->registerListener(EVENT_PAUSE, GAME_PAUSED, std::bind(&InputManager::unpause, eventManager));
-    eventManager->registerListener(EVENT_PAUSE, GAME_RUNNING, std::bind(&InputManager::pause, eventManager));
+    eventManager->registerBinding(EVENT_PAUSE, GAME_PAUSED, std::bind(&InputManager::unpause, eventManager));
+    eventManager->registerBinding(EVENT_PAUSE, GAME_RUNNING, std::bind(&InputManager::pause, eventManager));
 }

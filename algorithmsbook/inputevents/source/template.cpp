@@ -54,7 +54,7 @@ int main() {
     sprites.push_back(makeCharacterSprite(halfWidth - 28, halfHeight - 8, 0));
 
     InputManager eventManager;
-    registerInputListeners(&eventManager, &sprites[0]);
+    registerInputBindings(&eventManager, &sprites[0]);
 
     while(1){
         eventManager.pollInput();

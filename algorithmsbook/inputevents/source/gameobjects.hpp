@@ -33,24 +33,24 @@ const std::string EVENT_PAUSE = "pause";
 // - Add event for pause and set game state to "paused"
 
 
-class EventCallable {
+class EventBinding {
 public:
     std::string stateType;
     voidFunction callable;
 
-    EventCallable(std::string ctgry, voidFunction func);
+    EventBinding(std::string ctgry, voidFunction func);
 };
 
 
 class InputManager{
 public:
-    std::map<std::string, std::vector<EventCallable>> listenerMap;
+    std::map<std::string, std::vector<EventBinding>> bindings;
     std::vector<std::tuple<u8, std::string, std::string>> keyMaps;
     std::string state = GAME_RUNNING;
 
     InputManager();
 
-    void registerListener(std::string eventName, std::string stateType, voidFunction func);
+    void registerBinding(std::string eventName, std::string stateType, voidFunction func);
 
     void pollInput();
 
@@ -117,4 +117,4 @@ class StaticObject;
 
 class Trigger;
 
-void registerInputListeners(InputManager* eventManager, Sprite* player);
+void registerInputBindings(InputManager* eventManager, Sprite* player);
