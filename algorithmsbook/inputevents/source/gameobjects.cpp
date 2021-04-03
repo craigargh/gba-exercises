@@ -123,6 +123,8 @@ Sprite::Sprite(OBJATTR* oamRef, u8 xPos, u8 yPos){
 };
 
 void Sprite::draw(){
+    // TODO: Implement width and height for different sized sprites
+
     oam->attr0 = OBJ_16_COLOR | ATTR0_SQUARE | OBJ_Y(y);
     oam->attr1 = ATTR1_SIZE_16 | OBJ_X(x);
     oam->attr2 = animation.tile() | ATTR2_PALETTE(0);
