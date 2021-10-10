@@ -2,6 +2,12 @@
 
 
 std::vector<Sprite> sprites;
+u8 spriteIdIndex = 0;
+
+u8 getSpriteId(){
+    spriteIdIndex++;
+    return spriteIdIndex;
+}
 
 
 EventBinding::EventBinding(std::string ctgry, voidFunction func){
@@ -115,12 +121,15 @@ u16 Animation::tile(){
 }
 
 
-Sprite::Sprite(){};
+Sprite::Sprite(){
+    spriteId = getSpriteId();
+};
 
 Sprite::Sprite(OBJATTR* oamRef, u8 xPos, u8 yPos){
     oam = oamRef;
     x = xPos;
     y = yPos;
+    spriteId = getSpriteId();
 };
 
 void Sprite::draw(){
@@ -179,12 +188,13 @@ bool Sprite::checkCollision(int x, int y){
     bool collision = false;
 
     for (u8 i = 0; i < sprites.size(); i++) {
-        // TODO: Add sprite IDs so that it doesn't check whether a sprite collides with itself
-
         Sprite other = sprites[i];
 
-        // TODO: Change so that min and max for x and y are methods on the Sprite object
+        if (spriteId == other.spriteId){
+            continue;
+        }
 
+        // TODO: Change so that min and max for x and y are methods on the Sprite object
         int a_min_x = x; 
         int a_max_x = x + 16;
         int a_min_y = y;
@@ -197,7 +207,7 @@ bool Sprite::checkCollision(int x, int y){
 
 
         bool doesNotIntersect = (a_max_x < b_min_x) || (b_max_x < a_min_x) || (a_max_y < b_min_y) || (b_max_y < a_min_y);
-        collision = !doesNotIntersect;
+        collision = collision || !doesNotIntersect;
     }
 
     return collision;

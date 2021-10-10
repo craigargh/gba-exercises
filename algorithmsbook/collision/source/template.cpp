@@ -9,8 +9,6 @@
 #include "asuka.h"
 #include "gameobjects.hpp"
 
-#include "mgba.h"
-
 
 
 
@@ -61,13 +59,12 @@ Sprite makeNPCSprite(u8 x, u8 y, u8 bufferIndex, bool flip=false){
 int main() {
     initGameboy();
 
-    mgba_console_open();
-
     u8 halfWidth = SCREEN_WIDTH >> 1;
     u8 halfHeight = SCREEN_HEIGHT >> 1;
 
     sprites.push_back(makeCharacterSprite(halfWidth - 28, halfHeight - 8, 0));
     sprites.push_back(makeNPCSprite(halfWidth + 20, halfHeight - 8, 1));
+    sprites.push_back(makeNPCSprite(halfWidth - 40, halfHeight + 20, 2));
 
     InputManager eventManager;
     registerInputBindings(&eventManager, &sprites[0]);
@@ -85,8 +82,6 @@ int main() {
 
         VBlankIntrWait();
         CpuFastSet(oam_backbuffer, OAM, ((sizeof(OBJATTR)*128)>>2) | COPY32);
-
-        printf("%d\n", sprites.size());
     }
     return 0;
 }

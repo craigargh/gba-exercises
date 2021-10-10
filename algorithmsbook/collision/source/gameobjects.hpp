@@ -92,6 +92,7 @@ public:
 
 class Sprite {
 public:
+    u8 spriteId;
     u8 x;
     u8 y;
     OBJATTR* oam;
@@ -124,3 +125,7 @@ class Trigger;
 void registerInputBindings(InputManager* eventManager, Sprite* player);
 
 extern std::vector<Sprite> sprites;
+extern u8 spriteIdIndex;
+
+
+u8 getSpriteId();
